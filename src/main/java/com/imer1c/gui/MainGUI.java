@@ -6,6 +6,7 @@ import com.imer1c.downloading.VideoType;
 import com.imer1c.gui.components.PlaceholderTextField;
 
 import javax.swing.*;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 
 public class MainGUI extends JPanel {
@@ -20,6 +21,7 @@ public class MainGUI extends JPanel {
 
         this.linkField = new PlaceholderTextField("Link");
         this.add = new JButton("+");
+        this.add.setBorder(((BorderUIResource.CompoundBorderUIResource) this.add.getBorder()).getOutsideBorder());
         this.list = new VideosListComponent();
         JComboBox<VideoType> types = new JComboBox<>(VideoType.values());
 
@@ -29,16 +31,16 @@ public class MainGUI extends JPanel {
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(linkField)
                         .addComponent(types, 80, 80, 80)
-                        .addComponent(add, 40, 40, 40)
+                        .addComponent(add, 30, 30, 30)
                 )
                 .addComponent(this.list)
         );
 
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
-                        .addComponent(linkField, 40, 40, 40)
-                        .addComponent(types, 40, 40, 40)
-                        .addComponent(add, 40, 40, 40)
+                        .addComponent(linkField, 30, 30, 30)
+                        .addComponent(types, 30, 30, 30)
+                        .addComponent(add, 30, 30, 30)
                 )
                 .addComponent(this.list)
         );
