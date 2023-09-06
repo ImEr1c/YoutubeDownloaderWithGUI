@@ -24,6 +24,11 @@ shadowJar {
     archiveVersion = ""
 }
 
+task createExe(dependsOn: shadowJar, type: Exec)
+{
+    commandLine 'jpackage', '--type', 'app-image', '--app-version', project.version, '--dest', 'installers', '--verbose', '--input', 'build/libs/', '--main-jar', 'YoutubeDownloader.jar', '--name', rootProject.name, '--main-class', 'com.imer1c.Main'
+}
+
 task createInstallers(dependsOn: shadowJar, type: Exec)
 {
     commandLine 'jpackage', '--type', 'pkg', '--app-version', project.version, '--dest', 'installers', '--verbose', '--input', 'build/libs/', '--main-jar', 'YoutubeDownloader.jar', '--name', rootProject.name, '--main-class', 'com.imer1c.Main'
