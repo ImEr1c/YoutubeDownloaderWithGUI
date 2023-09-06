@@ -1,0 +1,30 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'java'
+}
+
+group = 'com.imer1c'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.sealedtx:java-youtube-downloader:3.2.3'
+}
+
+shadowJar {
+    manifest {
+        attributes "Main-Class": "com.imer1c.Main"
+    }
+
+    archiveClassifier.set("")
+    archiveVersion = ""
+}
+
+task createInstallers(dependsOn: shadowJar, type: Exec)
+{
+    commandLine 'jpackage', '--type', 'app-image', '--app-version', project.version, '--dest', 'installers', '--verbose', '--input', 'build/libs/', '--main-jar', 'YoutubeDownloader.jar', '--name', rootProject.name, '--main-class', 'com.imer1c.Main'
+}
