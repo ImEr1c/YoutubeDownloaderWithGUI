@@ -29,16 +29,16 @@ public class MainGUI extends JPanel {
                 .addGroup(layout.createSequentialGroup()
                         .addComponent(linkField)
                         .addComponent(types, 80, 80, 80)
-                        .addComponent(add, 30, 30, 30)
+                        .addComponent(add, 40, 40, 40)
                 )
                 .addComponent(this.list)
         );
 
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
-                        .addComponent(linkField, 30, 30, 30)
-                        .addComponent(types, 30, 30, 30)
-                        .addComponent(add, 30, 30, 30)
+                        .addComponent(linkField, 40, 40, 40)
+                        .addComponent(types, 40, 40, 40)
+                        .addComponent(add, 40, 40, 40)
                 )
                 .addComponent(this.list)
         );
