@@ -83,6 +83,6 @@ public class Downloader {
                     }
                 }).async();
 
-        //this.downloader.downloadVideoFile(download);
+        this.downloader.downloadVideoFile(download);
     }
 }
