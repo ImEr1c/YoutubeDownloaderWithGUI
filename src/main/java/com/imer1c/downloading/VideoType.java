@@ -1,8 +1,8 @@
 package com.imer1c.downloading;
 
 public enum VideoType {
-    MP4,
-    MP3;
+    VIDEO,
+    AUDIO;
 
     @Override
     public String toString()

@@ -1,6 +1,16 @@
 package com.imer1c.utils;
 
+import com.github.kiulian.downloader.model.videos.VideoDetails;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class Utils {
     public static String decodeVideoId(String link)
@@ -17,6 +27,30 @@ public class Utils {
         {
             throw new RuntimeException("Video Id not recognized: " + link);
         }
+    }
+
+    public static JPanel center(JComponent... components)
+    {
+        JPanel panel = new JPanel(new FlowLayout());
+
+        for (JComponent component : components)
+        {
+            panel.add(component);
+        }
+
+        return panel;
+    }
+
+    public static JPanel end(JComponent... components)
+    {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+        for (JComponent component : components)
+        {
+            panel.add(component);
+        }
+
+        return panel;
     }
 
     public static File getDownloadsFolder()

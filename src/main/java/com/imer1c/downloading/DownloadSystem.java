@@ -22,12 +22,12 @@ public class DownloadSystem {
         this.guiCallback = guiCallback;
     }
 
-    public void parseAndStart(String link, boolean mp3)
+    public void parseAndStart(String link, boolean audio)
     {
         Downloader downloader = new Downloader(link);
         this.downloaderList.add(0, downloader);
 
-        downloader.parseDetails(mp3);
+        downloader.parseDetails(audio);
 
         this.guiCallback.addToList(downloader);
         downloader.start();

@@ -18,10 +18,16 @@ public class MainGUI extends JPanel {
     public MainGUI(Client client)
     {
         this.setPreferredSize(new Dimension(1280, 720));
+        this.setBackground(Color.GRAY);
 
         this.linkField = new PlaceholderTextField("Link");
         this.add = new JButton("+");
-        this.add.setBorder(((BorderUIResource.CompoundBorderUIResource) this.add.getBorder()).getOutsideBorder());
+
+        if (System.getProperty("os.name").contains("win"))
+        {
+            this.add.setBorder(((BorderUIResource.CompoundBorderUIResource) this.add.getBorder()).getOutsideBorder());
+        }
+
         this.list = new VideosListComponent();
         JComboBox<VideoType> types = new JComboBox<>(VideoType.values());
 
@@ -29,26 +35,30 @@ public class MainGUI extends JPanel {
 
         layout.setHorizontalGroup(layout.createParallelGroup()
                 .addGroup(layout.createSequentialGroup()
+                        .addGap(5)
                         .addComponent(linkField)
                         .addComponent(types, 80, 80, 80)
                         .addComponent(add, 30, 30, 30)
+                        .addGap(5)
                 )
                 .addComponent(this.list)
         );
 
         layout.setVerticalGroup(layout.createSequentialGroup()
+                .addGap(5)
                 .addGroup(layout.createParallelGroup()
                         .addComponent(linkField, 30, 30, 30)
                         .addComponent(types, 30, 30, 30)
                         .addComponent(add, 30, 30, 30)
                 )
+                .addGap(4)
                 .addComponent(this.list)
         );
 
         DownloadSystem downloadSystem = client.getDownloadSystem();
 
         this.add.addActionListener(e -> {
-            downloadSystem.parseAndStart(this.linkField.getText(), types.getSelectedItem() == VideoType.MP3);
+            downloadSystem.parseAndStart(this.linkField.getText(), types.getSelectedItem() == VideoType.AUDIO);
 
             this.linkField.setText("");
         });

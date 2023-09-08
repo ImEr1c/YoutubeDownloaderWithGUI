@@ -1,11 +1,12 @@
 package com.imer1c.gui.components;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class VerticalLayout implements LayoutManager {
 
     private boolean fillHorizontal, centerHorizontal, centerVertical;
-    private int centerHeight;
+    private int centerHeight, gap;
 
     public void setFillHorizontal(boolean fillHorizontal)
     {
@@ -20,6 +21,11 @@ public class VerticalLayout implements LayoutManager {
     public void setCenterVertical(boolean centerVertical)
     {
         this.centerVertical = centerVertical;
+    }
+
+    public void setGap(int gap)
+    {
+        this.gap = gap;
     }
 
     @Override
@@ -61,8 +67,10 @@ public class VerticalLayout implements LayoutManager {
             dim.width = parent.getWidth();
         }
 
-        for (Component component : parent.getComponents())
+        for (int i = 0; i < parent.getComponentCount(); i++)
         {
+            Component component = parent.getComponent(i);
+
             if (component.isVisible())
             {
                 if (!this.fillHorizontal)
@@ -71,6 +79,11 @@ public class VerticalLayout implements LayoutManager {
                 }
 
                 dim.height += component.getHeight();
+
+                if (i + 1 < parent.getComponentCount())
+                {
+                    dim.height += this.gap;
+                }
             }
         }
 
@@ -87,8 +100,10 @@ public class VerticalLayout implements LayoutManager {
             y = (parent.getHeight() - this.centerHeight) / 2;
         }
 
-        for (Component component : parent.getComponents())
+        for (int i = 0; i < parent.getComponentCount(); i++)
         {
+            Component component = parent.getComponent(i);
+
             int x = 0;
 
             if (fillHorizontal)
@@ -105,11 +120,14 @@ public class VerticalLayout implements LayoutManager {
                 x = (parent.getWidth() - component.getWidth()) / 2;
             }
 
-            System.out.println(x);
-            System.out.println(y);
             component.setLocation(x, y);
 
             y += component.getHeight();
+
+            if (i + 1 < parent.getComponentCount())
+            {
+                y += this.gap;
+            }
         }
     }
 }

@@ -1,15 +1,15 @@
 package com.imer1c.downloading;
 
 import com.github.kiulian.downloader.YoutubeDownloader;
-import com.github.kiulian.downloader.downloader.YoutubeCallback;
 import com.github.kiulian.downloader.downloader.YoutubeProgressCallback;
 import com.github.kiulian.downloader.downloader.request.RequestVideoFileDownload;
 import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.github.kiulian.downloader.downloader.response.Response;
+import com.github.kiulian.downloader.downloader.response.ResponseStatus;
 import com.github.kiulian.downloader.model.videos.VideoDetails;
 import com.github.kiulian.downloader.model.videos.VideoInfo;
 import com.github.kiulian.downloader.model.videos.formats.Format;
-import com.github.kiulian.downloader.model.videos.formats.VideoFormat;
+import com.imer1c.gui.ErrorDialog;
 import com.imer1c.gui.VideoComponent;
 import com.imer1c.utils.Utils;
 
@@ -19,9 +19,12 @@ public class Downloader {
 
     private final YoutubeDownloader downloader;
     private final String link;
-    private String title;
+    private VideoDetails details;
     private Format format;
     private VideoComponent componentCallback;
+    private boolean audio;
+    private File output;
+    private Response<File> response;
 
     public Downloader(String link)
     {
@@ -29,7 +32,7 @@ public class Downloader {
         this.link = link;
     }
 
-    public void parseDetails(boolean mp3)
+    public void parseDetails(boolean audio)
     {
         String videoId = Utils.decodeVideoId(link);
         VideoInfo info = this.info(videoId);
@@ -37,8 +40,9 @@ public class Downloader {
 
         info.audioFormats().forEach(audioFormat -> System.out.println(audioFormat.mimeType() + " - " + audioFormat.audioQuality()));
 
-        this.format = info.bestVideoWithAudioFormat();
-        this.title = details.title();
+        this.audio = audio;
+        this.format = audio ? info.bestAudioFormat() : info.bestVideoWithAudioFormat();
+        this.details = details;
     }
 
     private VideoInfo info(String videoId)
@@ -48,9 +52,19 @@ public class Downloader {
         return videoInfo.data();
     }
 
-    public String getTitle()
+    public boolean isAudio()
     {
-        return title;
+        return audio;
+    }
+
+    public VideoDetails getDetails()
+    {
+        return this.details;
+    }
+
+    public File getOutput()
+    {
+        return output;
     }
 
     public void setComponentCallback(VideoComponent componentCallback)
@@ -61,7 +75,7 @@ public class Downloader {
     public void start()
     {
         RequestVideoFileDownload download = new RequestVideoFileDownload(this.format)
-                .renameTo(this.title)
+                .renameTo(this.details.title())
                 .saveTo(Utils.getDownloadsFolder())
                 .callback(new YoutubeProgressCallback<>() {
                     @Override
@@ -79,10 +93,23 @@ public class Downloader {
                     @Override
                     public void onError(Throwable throwable)
                     {
-
+                        throwable.printStackTrace();
+                        new ErrorDialog(throwable);
                     }
                 }).async();
 
-        this.downloader.downloadVideoFile(download);
+        this.output = download.getOutputFile();
+
+        this.response = this.downloader.downloadVideoFile(download);
+    }
+
+    public void del()
+    {
+        if (this.response.status() == ResponseStatus.downloading)
+        {
+            this.response.cancel();
+        }
+
+        this.output.delete();
     }
 }
