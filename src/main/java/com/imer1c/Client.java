@@ -1,5 +1,8 @@
 package com.imer1c;
 
+import com.github.kiulian.downloader.Config;
+import com.github.kiulian.downloader.YoutubeDownloader;
+import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
 import com.imer1c.downloading.DownloadSystem;
 import com.imer1c.gui.MainGUI;
 

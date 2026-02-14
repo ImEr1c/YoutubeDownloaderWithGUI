@@ -1,7 +1,13 @@
 package com.imer1c.gui;
 
+import com.github.kiulian.downloader.model.Extension;
+import com.github.kiulian.downloader.model.videos.VideoDetails;
+import com.github.kiulian.downloader.model.videos.VideoInfo;
+import com.github.kiulian.downloader.model.videos.formats.VideoFormat;
+import com.github.kiulian.downloader.model.videos.quality.VideoQuality;
 import com.imer1c.Client;
 import com.imer1c.downloading.DownloadSystem;
+import com.imer1c.downloading.Downloader;
 import com.imer1c.downloading.VideoType;
 import com.imer1c.gui.components.PlaceholderTextField;
 
@@ -14,6 +20,7 @@ public class MainGUI extends JPanel {
     private final PlaceholderTextField linkField;
     private final JButton add;
     private final VideosListComponent list;
+    private Downloader downloader;
 
     public MainGUI(Client client)
     {
@@ -30,6 +37,7 @@ public class MainGUI extends JPanel {
 
         this.list = new VideosListComponent();
         JComboBox<VideoType> types = new JComboBox<>(VideoType.values());
+        JComboBox<VideoQuality> qualities = new JComboBox<>();
 
         GroupLayout layout = new GroupLayout(this);
 
@@ -38,6 +46,7 @@ public class MainGUI extends JPanel {
                         .addGap(5)
                         .addComponent(linkField)
                         .addComponent(types, 80, 80, 80)
+                        .addComponent(qualities, 80, 80, 80)
                         .addComponent(add, 30, 30, 30)
                         .addGap(5)
                 )
@@ -49,6 +58,7 @@ public class MainGUI extends JPanel {
                 .addGroup(layout.createParallelGroup()
                         .addComponent(linkField, 30, 30, 30)
                         .addComponent(types, 30, 30, 30)
+                        .addComponent(qualities, 30, 30, 30)
                         .addComponent(add, 30, 30, 30)
                 )
                 .addGap(4)
@@ -58,9 +68,12 @@ public class MainGUI extends JPanel {
         DownloadSystem downloadSystem = client.getDownloadSystem();
 
         this.add.addActionListener(e -> {
-            downloadSystem.parseAndStart(this.linkField.getText(), types.getSelectedItem() == VideoType.AUDIO);
+            VideoInfo info = downloadSystem.parse(this.linkField.getText(), types.getSelectedItem() == VideoType.AUDIO);
 
+            downloadSystem.startLast();
             this.linkField.setText("");
+
+
         });
 
         this.setLayout(layout);
